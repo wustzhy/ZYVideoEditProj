@@ -85,10 +85,11 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
             default:
                 break;
         }
-        player.currentItem.asset.duration;
+        
+
         // 按钮
-        //CGFloat sec = player.currentItem.duration.value / player.currentItem.duration.timescale;
-        CGFloat sec = CMTimeGetSeconds(player.currentItem.duration);
+
+        CGFloat sec = [self getDurationOfVideo:player];
         [self createButtonWithTitle:[NSString stringWithFormat:@"播放 第%zd个 时长:%f",i+1 -ZBtnType_One, sec]
                                 tag:i
                               frame:btn_rect];
@@ -155,10 +156,13 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
     AVMutableCompositionTrack * firstTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
     
     for (int i = 0; i < array.count; i++) {
+        
+//        NSLog(@"%lld -- %zd-- %lld --- %zd",array[0].duration.value , array[0].duration.timescale , array[1].duration.value, array[1].duration.timescale);  //36057 -- 600-- 5644 --- 600
+        
         NSError * error;
         [firstTrack insertTimeRange:CMTimeRangeFromTimeToTime(kCMTimeZero, array[i].duration)
                             ofTrack:[array[i] tracksWithMediaType:AVMediaTypeVideo].firstObject
-                             atTime:kCMTimeZero
+                             atTime:i>0 ? array[i-1].duration : kCMTimeZero
                               error:&error];
     }
     
@@ -176,17 +180,41 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
         
         if (exporter.status == AVAssetExportSessionStatusCompleted) {
             
-            [SVProgressHUD showSuccessWithStatus:@"视频生成完毕 , 请点击视频3 播放"];
+            [SVProgressHUD showSuccessWithStatus:@"视频合成完毕 , 请点击视频3 播放"];
             
             AVPlayerItem * item = [AVPlayerItem playerItemWithURL:exporter.outputURL];
             [self.player3 replaceCurrentItemWithPlayerItem:item];
             [self.player3 seekToTime:CMTimeMake(0, 1)];
+            
+            // 时长
+            CGFloat sec = [self getDurationOfVideo:self.player3];
+            UIButton * btn = [self.view viewWithTag:ZBtnType_Three];
+            [btn setTitle:[NSString stringWithFormat:@"播放 第%zd个 时长:%f",ZBtnType_Three+1 -ZBtnType_One, sec] forState:UIControlStateNormal];
         }
         
     }];
 }
 
 #pragma mark - private
+
+- (CGFloat)getDurationOfVideo:(AVPlayer *)player
+{
+//    NSLog(@"%zd ---- %lld --- %zd",player.currentItem.asset.duration, player.currentItem.asset.duration.value, player.currentItem.asset.duration.timescale );                         //6171512464 ---- 36057 --- 600
+//    NSLog(@"player.currentItem.duration value = %zd",player.currentItem.duration.value);    // 0
+    
+//        CGFloat sec = (CGFloat)player.currentItem.duration.value / player.currentItem.duration.timescale; //---nan
+//        CGFloat sec = CMTimeGetSeconds(player.currentItem.duration);      //---nan
+
+//        long long value = player.currentItem.asset.duration.value;        //36057
+//        int timescale = player.currentItem.asset.duration.timescale;      //600
+//        CGFloat sec = value / (CGFloat)timescale;                         //60.095000
+    
+    CGFloat sec = CMTimeGetSeconds(player.currentItem.asset.duration);  //60.095000
+    
+    NSLog(@"sec = %f",sec);
+    
+    return sec;
+}
 
 - (NSURL *)getVideoPathUrlToSave{
     
@@ -227,6 +255,10 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
                               frame:(CGRect)frame
 {
     UIButton *button = [[UIButton alloc] initWithFrame:frame];
+    
+    button.layer.borderColor = [UIColor orangeColor].CGColor;
+    button.layer.borderWidth = 2;
+    
     [button setTitle:title forState:UIControlStateNormal];
     
     button.titleLabel.adjustsFontSizeToFitWidth = YES;
@@ -247,6 +279,10 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
 - (UIButton *)createButtonWithTitle:(NSString *)title
                        action:(SEL)action{
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    button.layer.borderColor = [UIColor purpleColor].CGColor;
+    button.layer.borderWidth = 2;
+    
     [button setTitle:title forState:UIControlStateNormal];
     
     [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
