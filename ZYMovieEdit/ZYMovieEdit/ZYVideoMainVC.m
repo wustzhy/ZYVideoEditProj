@@ -118,12 +118,12 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
 }
 
 #pragma mark - touch
-// 单击
+// 单击"播放"
 - (void)tapButtonTapped:(UIButton *)sender forEvent:(UIEvent *)event
 {
     [self performSelector:@selector(playAVPlayerWith:) withObject:sender afterDelay:0.2];
 }
-// 双击
+// 双击"播放"
 - (void)repeatBtnTapped:(UIButton *)sender forEvent:(UIEvent *)event {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(playAVPlayerWith:) object:sender];
     // 延长0.2 秒
@@ -296,8 +296,11 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
     // 4 - Get path
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:
-                             [NSString stringWithFormat:@"mergeVideo-%d.mov",12345]];   // arc4random() % 1000 
+//    NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:
+//                             [NSString stringWithFormat:@"mergeVideo-%d.mov",12345]];   // arc4random() % 1000
+        NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:
+                                 [NSString stringWithFormat:@"mergeVideo-%d.mov",arc4random() % 1000]];   //必须要变路径,否则第二次合成 输出到同一个url会失败
+
     NSURL * url = [NSURL fileURLWithPath:myPathDocs];
     return url;
 }
