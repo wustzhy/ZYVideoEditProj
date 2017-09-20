@@ -18,6 +18,9 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
     ZBtnType_One = 1000,
     ZBtnType_Two,
     ZBtnType_Three,
+    ZBtnType_Four,
+    
+    ZBtnType_End,
 };
 
 @interface ZYVideoMainVC ()
@@ -25,6 +28,8 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
 @property (nonatomic,   strong)     AVPlayer * player1;
 @property (nonatomic,   strong)     AVPlayer * player2;
 @property (nonatomic,   strong)     AVPlayer * player3;
+@property (nonatomic,   strong)     AVPlayer * player4;
+
 
 @end
 
@@ -46,7 +51,7 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
     CGFloat xx , yy , wh = 150 ;
     CGFloat gap_v = 40 , gap_h = 20;    // 垂直|水平
     
-    for (int i = ZBtnType_One; i <= ZBtnType_Three; i++) {
+    for (int i = ZBtnType_One; i < ZBtnType_End; i++) {
         
         yy = y0 + (i-ZBtnType_One) /2 * (wh+gap_v) ;     // 行
         xx = x0 + (i-ZBtnType_One) %2 * (wh+gap_h) ;     // 列(共2列)
@@ -78,8 +83,15 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
             {
                 
                 self.player3 = [self createPlayerWithFrame:rect
-                                        withBundleResource:@"test_vertical_1.MOV"];
+                                        withBundleResource:@"music.mp3"];
                 player = self.player3;
+            }
+                break;
+            case ZBtnType_Four:
+            {
+                self.player4 = [self createPlayerWithFrame:rect
+                                        withBundleResource:@"music.mp3"];
+                player = self.player4;
             }
                 break;
             default:
@@ -95,9 +107,14 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
                               frame:btn_rect];
     }
     
+    // 选择"音频"?
     
-    UIButton * compose_btn = [self createButtonWithTitle:@"合并" action:@selector(composeAction)];
-    compose_btn.frame = CGRectMake(30, 70, 100, 30);
+    
+    UIButton * composeMovie_btn = [self createButtonWithTitle:@"合并视频1、2" action:@selector(composeMovieAction)];
+    composeMovie_btn.frame = CGRectMake(30, 70, 100, 30);
+    
+    UIButton * composeVideoAudio_btn = [self createButtonWithTitle:@"合并视频1、2 并更换背景音3 music" action:@selector(composeVideoAudioAction)];
+    composeVideoAudio_btn.frame = CGRectMake(150, 70, 200, 30);
 }
 
 #pragma mark - touch
@@ -112,20 +129,29 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
     // 延长0.2 秒
     [self performSelector:@selector(playMovieVCWith:) withObject:sender afterDelay:0.2];
 }
-// 合并
--(void)composeAction
+// 合并 两视频(背景音不变)
+-(void)composeMovieAction
 {
     [self composeVideosWithAVAssetArray:@[self.player1.currentItem.asset ,
                                           self.player2.currentItem.asset]
+                 audiosWithAVAssetArray:@[]
      ];
      
+}
+// 合并 两视频 ,更换背景音
+- (void)composeVideoAudioAction
+{
+    [self composeVideosWithAVAssetArray:@[self.player1.currentItem.asset ,
+                                          self.player2.currentItem.asset]
+                 audiosWithAVAssetArray:@[self.player3.currentItem.asset]
+     ];
 }
 
 #pragma mark - player handle
 // play AVPlayer
 - (void)playAVPlayerWith:(UIButton *)sender
 {
-    NSArray <AVPlayer *>* array = @[self.player1 , self.player2 , self.player3];
+    NSArray <AVPlayer *>* array = @[self.player1 , self.player2 , self.player3 , self.player4];
     NSInteger index = sender.tag - ZBtnType_One;
     AVPlayer * player = array[index];
     
@@ -136,7 +162,7 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
 // play MPMoviePlayerViewController
 - (void)playMovieVCWith:(UIButton *)sender
 {
-    NSArray <AVPlayer *>* array = @[self.player1 , self.player2 , self.player3];
+    NSArray <AVPlayer *>* array = @[self.player1 , self.player2 , self.player3 , self.player4];
     NSInteger index = sender.tag - ZBtnType_One;
     AVPlayer * player = array[index];
     
@@ -144,11 +170,15 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
     
     MPMoviePlayerViewController * playerVC = [[MPMoviePlayerViewController alloc]initWithContentURL: avSet.URL];
     [self presentMoviePlayerViewControllerAnimated:playerVC];
+    
+    for (int i = 0; i < array.count; i++) {
+        [array[i] pause];
+    }
 }
 
 // compose
 
-- (void)composeVideosWithAVAssetArray:(NSArray <AVAsset * >* )array
+- (void)composeVideosWithAVAssetArray:(NSArray <AVAsset * >* )array audiosWithAVAssetArray:(NSArray <AVAsset * >* )array1
 {
     [SVProgressHUD show];
     
@@ -157,11 +187,15 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
     // video track
     AVMutableCompositionTrack * firstTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
     
+    CGFloat sec_video = 0;  // 视频时长统计(累加) , 用于 音频时长过长比较 砍掉
+    
     for (int i = 0; i < array.count; i++) {
+        
+        sec_video += [self getDurationSecOfVidioAsset:array[i]];
         
         NSError * error;
         [firstTrack insertTimeRange:CMTimeRangeFromTimeToTime(kCMTimeZero, array[i].duration)
-                            ofTrack:[array[i] tracksWithMediaType:AVMediaTypeVideo].firstObject
+                            ofTrack:[array[i] tracksWithMediaType:AVMediaTypeVideo].firstObject //video
                              atTime:i>0 ? array[i-1].duration : kCMTimeZero
                               error:&error];
         if (error) {
@@ -170,15 +204,46 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
     }
     
     // audio track
-    for (int i = 0; i < array.count; i++) {
-        NSError * error;
-        AVMutableCompositionTrack * audioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
-        [audioTrack insertTimeRange:CMTimeRangeFromTimeToTime(kCMTimeZero, array[i].duration)
-                            ofTrack:[array[i] tracksWithMediaType:AVMediaTypeAudio].firstObject
-                             atTime:i>0 ? array[i-1].duration : kCMTimeZero
-                              error:&error];
-        if (error) {
-            NSLog(@"error = %@",error);
+    AVMutableCompositionTrack * audioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    if (array1.count == 0) {
+        
+        for (int i = 0; i < array.count; i++) {
+            NSError * error;
+            [audioTrack insertTimeRange:CMTimeRangeFromTimeToTime(kCMTimeZero, array[i].duration)
+                                ofTrack:[array[i] tracksWithMediaType:AVMediaTypeAudio].firstObject //audio
+                                 atTime:i>0 ? array[i-1].duration : kCMTimeZero
+                                  error:&error];
+            if (error) {
+                NSLog(@"error = %@",error);
+            }
+        }
+    
+    }else{
+        
+        CGFloat sec_audio = 0;  // 音频时长统计(累加)
+        
+        for (int i = 0; i < array1.count; i++) {
+            
+            CMTime cmT_i = array1[i].duration;
+            
+            CGFloat sec_i = [self getDurationSecOfVidioAsset:array1[i]];
+            
+            if (sec_audio + sec_i > sec_video) {          // 本次duration 超出 总视轨 长度
+                sec_i = sec_video - sec_audio;
+                cmT_i.value = sec_i * cmT_i.timescale;
+            }
+            
+            NSError * error;
+            [audioTrack insertTimeRange:CMTimeRangeFromTimeToTime(kCMTimeZero, cmT_i)
+                                ofTrack:[array1[i] tracksWithMediaType:AVMediaTypeAudio].firstObject //audio
+                                 atTime:i>0 ? array1[i-1].duration : kCMTimeZero
+                                  error:&error];
+            if (error) {
+                NSLog(@"error = %@",error);
+            }
+            
+            sec_audio += sec_i;
         }
     }
     
@@ -199,13 +264,13 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
             [SVProgressHUD showSuccessWithStatus:@"视频合成完毕 , 请点击视频3 播放"];
             
             AVPlayerItem * item = [AVPlayerItem playerItemWithURL:exporter.outputURL];
-            [self.player3 replaceCurrentItemWithPlayerItem:item];
-            [self.player3 seekToTime:CMTimeMake(0, 1)];
+            [self.player4 replaceCurrentItemWithPlayerItem:item];
+            [self.player4 seekToTime:CMTimeMake(0, 1)];
             
             // 时长
-            CGFloat sec = [self getDurationOfVideo:self.player3];
-            UIButton * btn = [self.view viewWithTag:ZBtnType_Three];
-            [btn setTitle:[NSString stringWithFormat:@"播放 第%zd个 时长:%f",ZBtnType_Three+1 -ZBtnType_One, sec] forState:UIControlStateNormal];
+            CGFloat sec = [self getDurationOfVideo:self.player4];
+            UIButton * btn = [self.view viewWithTag:ZBtnType_End-1];
+            [btn setTitle:[NSString stringWithFormat:@"播放 第%zd个 时长:%f",ZBtnType_End -ZBtnType_One, sec] forState:UIControlStateNormal];
         }
         
     }];
@@ -216,9 +281,12 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
 - (CGFloat)getDurationOfVideo:(AVPlayer *)player
 {
     
-    CGFloat sec = CMTimeGetSeconds(player.currentItem.asset.duration);  //60.095000
-    
-    NSLog(@"sec = %f",sec);
+    return [self getDurationSecOfVidioAsset:player.currentItem.asset];
+}
+
+- (CGFloat)getDurationSecOfVidioAsset:(AVAsset *)asset;
+{
+    CGFloat sec = CMTimeGetSeconds(asset.duration);
     
     return sec;
 }
@@ -229,7 +297,7 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:
-                             [NSString stringWithFormat:@"mergeVideo-%d.mov",arc4random() % 1000]];
+                             [NSString stringWithFormat:@"mergeVideo-%d.mov",12345]];   // arc4random() % 1000 
     NSURL * url = [NSURL fileURLWithPath:myPathDocs];
     return url;
 }
@@ -291,6 +359,7 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
     button.layer.borderWidth = 2;
     
     [button setTitle:title forState:UIControlStateNormal];
+    button.titleLabel.adjustsFontSizeToFitWidth = YES;
     
     [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
     
