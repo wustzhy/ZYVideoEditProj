@@ -42,7 +42,7 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
 - (void)createUI
 {
     
-    CGFloat x0 = 20 , y0 = 150 ;        // 首个位置
+    CGFloat x0 = 20 , y0 = 150 ;        // 首个视频位置
     CGFloat xx , yy , wh = 150 ;
     CGFloat gap_v = 40 , gap_h = 20;    // 垂直|水平
     
@@ -153,17 +153,33 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
     [SVProgressHUD show];
     
     AVMutableComposition * mixComposition = [[AVMutableComposition alloc]init];
+    
+    // video track
     AVMutableCompositionTrack * firstTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
     
     for (int i = 0; i < array.count; i++) {
-        
-//        NSLog(@"%lld -- %zd-- %lld --- %zd",array[0].duration.value , array[0].duration.timescale , array[1].duration.value, array[1].duration.timescale);  //36057 -- 600-- 5644 --- 600
         
         NSError * error;
         [firstTrack insertTimeRange:CMTimeRangeFromTimeToTime(kCMTimeZero, array[i].duration)
                             ofTrack:[array[i] tracksWithMediaType:AVMediaTypeVideo].firstObject
                              atTime:i>0 ? array[i-1].duration : kCMTimeZero
                               error:&error];
+        if (error) {
+            NSLog(@"error = %@",error);
+        }
+    }
+    
+    // audio track
+    for (int i = 0; i < array.count; i++) {
+        NSError * error;
+        AVMutableCompositionTrack * audioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+        [audioTrack insertTimeRange:CMTimeRangeFromTimeToTime(kCMTimeZero, array[i].duration)
+                            ofTrack:[array[i] tracksWithMediaType:AVMediaTypeAudio].firstObject
+                             atTime:i>0 ? array[i-1].duration : kCMTimeZero
+                              error:&error];
+        if (error) {
+            NSLog(@"error = %@",error);
+        }
     }
     
     AVAssetExportSession *exporter = [[AVAssetExportSession alloc]initWithAsset:mixComposition presetName:AVAssetExportPresetHighestQuality];
@@ -199,15 +215,6 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
 
 - (CGFloat)getDurationOfVideo:(AVPlayer *)player
 {
-//    NSLog(@"%zd ---- %lld --- %zd",player.currentItem.asset.duration, player.currentItem.asset.duration.value, player.currentItem.asset.duration.timescale );                         //6171512464 ---- 36057 --- 600
-//    NSLog(@"player.currentItem.duration value = %zd",player.currentItem.duration.value);    // 0
-    
-//        CGFloat sec = (CGFloat)player.currentItem.duration.value / player.currentItem.duration.timescale; //---nan
-//        CGFloat sec = CMTimeGetSeconds(player.currentItem.duration);      //---nan
-
-//        long long value = player.currentItem.asset.duration.value;        //36057
-//        int timescale = player.currentItem.asset.duration.timescale;      //600
-//        CGFloat sec = value / (CGFloat)timescale;                         //60.095000
     
     CGFloat sec = CMTimeGetSeconds(player.currentItem.asset.duration);  //60.095000
     
@@ -299,14 +306,5 @@ typedef NS_ENUM(NSUInteger, ZBtnType) {
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

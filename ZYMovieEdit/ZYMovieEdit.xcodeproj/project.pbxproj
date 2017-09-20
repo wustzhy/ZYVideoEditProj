@@ -38,6 +38,7 @@
 		71222CA41F7295360079F15B /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 71222C9B1F7295360079F15B /* SVProgressHUD.bundle */; };
 		71222CA51F7295360079F15B /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 71222C9D1F7295360079F15B /* SVProgressHUD.m */; };
 		71222CA61F7295360079F15B /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 71222C9F1F7295360079F15B /* SVRadialGradientLayer.m */; };
+		71222CA81F72C1C30079F15B /* music.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 71222CA71F72C1C30079F15B /* music.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +96,7 @@
 		71222C9D1F7295360079F15B /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		71222C9E1F7295360079F15B /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
 		71222C9F1F7295360079F15B /* SVRadialGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRadialGradientLayer.m; sourceTree = "<group>"; };
+		71222CA71F72C1C30079F15B /* music.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = music.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +202,7 @@
 		71222C6A1F6FB9E10079F15B /* resource */ = {
 			isa = PBXGroup;
 			children = (
+				71222CA71F72C1C30079F15B /* music.mp3 */,
 				71222C6B1F6FB9E10079F15B /* test_horizontal_1.mp4 */,
 				71222C6C1F6FB9E10079F15B /* test_vertical_1.MOV */,
 			);
@@ -301,6 +304,7 @@
 			files = (
 				71222C321F6F7F1C0079F15B /* LaunchScreen.storyboard in Resources */,
 				71222C621F6FA7F00079F15B /* TZImagePickerController.bundle in Resources */,
+				71222CA81F72C1C30079F15B /* music.mp3 in Resources */,
 				71222C2F1F6F7F1C0079F15B /* Assets.xcassets in Resources */,
 				71222CA41F7295360079F15B /* SVProgressHUD.bundle in Resources */,
 				71222C6D1F6FB9E10079F15B /* test_horizontal_1.mp4 in Resources */,
