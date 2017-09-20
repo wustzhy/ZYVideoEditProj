@@ -31,6 +31,13 @@
 		71222C691F6FA7F00079F15B /* UIView+TZLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 71222C5B1F6FA7F00079F15B /* UIView+TZLayout.m */; };
 		71222C6D1F6FB9E10079F15B /* test_horizontal_1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 71222C6B1F6FB9E10079F15B /* test_horizontal_1.mp4 */; };
 		71222C6E1F6FB9E10079F15B /* test_vertical_1.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 71222C6C1F6FB9E10079F15B /* test_vertical_1.MOV */; };
+		71222CA01F7295360079F15B /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 71222C941F7295360079F15B /* LICENSE.txt */; };
+		71222CA11F7295360079F15B /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 71222C951F7295360079F15B /* README.md */; };
+		71222CA21F7295360079F15B /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 71222C981F7295360079F15B /* SVIndefiniteAnimatedView.m */; };
+		71222CA31F7295360079F15B /* SVProgressAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 71222C9A1F7295360079F15B /* SVProgressAnimatedView.m */; };
+		71222CA41F7295360079F15B /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 71222C9B1F7295360079F15B /* SVProgressHUD.bundle */; };
+		71222CA51F7295360079F15B /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 71222C9D1F7295360079F15B /* SVProgressHUD.m */; };
+		71222CA61F7295360079F15B /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 71222C9F1F7295360079F15B /* SVRadialGradientLayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +84,17 @@
 		71222C5B1F6FA7F00079F15B /* UIView+TZLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+TZLayout.m"; sourceTree = "<group>"; };
 		71222C6B1F6FB9E10079F15B /* test_horizontal_1.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_horizontal_1.mp4; sourceTree = "<group>"; };
 		71222C6C1F6FB9E10079F15B /* test_vertical_1.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = test_vertical_1.MOV; sourceTree = "<group>"; };
+		71222C941F7295360079F15B /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		71222C951F7295360079F15B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		71222C971F7295360079F15B /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
+		71222C981F7295360079F15B /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
+		71222C991F7295360079F15B /* SVProgressAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressAnimatedView.h; sourceTree = "<group>"; };
+		71222C9A1F7295360079F15B /* SVProgressAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressAnimatedView.m; sourceTree = "<group>"; };
+		71222C9B1F7295360079F15B /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
+		71222C9C1F7295360079F15B /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		71222C9D1F7295360079F15B /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		71222C9E1F7295360079F15B /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
+		71222C9F1F7295360079F15B /* SVRadialGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRadialGradientLayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +135,7 @@
 				71222C3A1F6FA4A70079F15B /* ZYVideoMainVC.m */,
 				71222C3C1F6FA7480079F15B /* CameraTool */,
 				71222C6A1F6FB9E10079F15B /* resource */,
+				71222C921F7295360079F15B /* 3rd_Tool */,
 				71222C2B1F6F7F1C0079F15B /* Main.storyboard */,
 				71222C2E1F6F7F1C0079F15B /* Assets.xcassets */,
 				71222C301F6F7F1C0079F15B /* LaunchScreen.storyboard */,
@@ -187,6 +206,40 @@
 			path = resource;
 			sourceTree = "<group>";
 		};
+		71222C921F7295360079F15B /* 3rd_Tool */ = {
+			isa = PBXGroup;
+			children = (
+				71222C931F7295360079F15B /* SVProgressHUD */,
+			);
+			path = 3rd_Tool;
+			sourceTree = "<group>";
+		};
+		71222C931F7295360079F15B /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				71222C941F7295360079F15B /* LICENSE.txt */,
+				71222C951F7295360079F15B /* README.md */,
+				71222C961F7295360079F15B /* SVProgressHUD */,
+			);
+			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
+		71222C961F7295360079F15B /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				71222C971F7295360079F15B /* SVIndefiniteAnimatedView.h */,
+				71222C981F7295360079F15B /* SVIndefiniteAnimatedView.m */,
+				71222C991F7295360079F15B /* SVProgressAnimatedView.h */,
+				71222C9A1F7295360079F15B /* SVProgressAnimatedView.m */,
+				71222C9B1F7295360079F15B /* SVProgressHUD.bundle */,
+				71222C9C1F7295360079F15B /* SVProgressHUD.h */,
+				71222C9D1F7295360079F15B /* SVProgressHUD.m */,
+				71222C9E1F7295360079F15B /* SVRadialGradientLayer.h */,
+				71222C9F1F7295360079F15B /* SVRadialGradientLayer.m */,
+			);
+			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -249,9 +302,11 @@
 				71222C321F6F7F1C0079F15B /* LaunchScreen.storyboard in Resources */,
 				71222C621F6FA7F00079F15B /* TZImagePickerController.bundle in Resources */,
 				71222C2F1F6F7F1C0079F15B /* Assets.xcassets in Resources */,
+				71222CA41F7295360079F15B /* SVProgressHUD.bundle in Resources */,
 				71222C6D1F6FB9E10079F15B /* test_horizontal_1.mp4 in Resources */,
 				71222C6E1F6FB9E10079F15B /* test_vertical_1.MOV in Resources */,
 				71222C2D1F6F7F1C0079F15B /* Main.storyboard in Resources */,
+				71222CA01F7295360079F15B /* LICENSE.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,13 +325,18 @@
 				71222C3F1F6FA7480079F15B /* ZYCameraView.m in Sources */,
 				71222C271F6F7F1C0079F15B /* AppDelegate.m in Sources */,
 				71222C611F6FA7F00079F15B /* TZImageManager.m in Sources */,
+				71222CA61F7295360079F15B /* SVRadialGradientLayer.m in Sources */,
 				71222C651F6FA7F00079F15B /* TZPhotoPreviewCell.m in Sources */,
+				71222CA51F7295360079F15B /* SVProgressHUD.m in Sources */,
 				71222C631F6FA7F00079F15B /* TZImagePickerController.m in Sources */,
 				71222C671F6FA7F00079F15B /* TZProgressView.m in Sources */,
 				71222C3B1F6FA4A70079F15B /* ZYVideoMainVC.m in Sources */,
 				71222C691F6FA7F00079F15B /* UIView+TZLayout.m in Sources */,
+				71222CA11F7295360079F15B /* README.md in Sources */,
 				71222C601F6FA7F00079F15B /* TZImageCropManager.m in Sources */,
+				71222CA21F7295360079F15B /* SVIndefiniteAnimatedView.m in Sources */,
 				71222C641F6FA7F00079F15B /* TZPhotoPickerController.m in Sources */,
+				71222CA31F7295360079F15B /* SVProgressAnimatedView.m in Sources */,
 				71222C241F6F7F1C0079F15B /* main.m in Sources */,
 				71222C661F6FA7F00079F15B /* TZPhotoPreviewController.m in Sources */,
 				71222C5F1F6FA7F00079F15B /* TZGifPhotoPreviewController.m in Sources */,
